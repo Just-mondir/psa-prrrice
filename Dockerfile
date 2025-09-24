@@ -1,27 +1,22 @@
 # Use Python 3.9 slim image as base
 FROM python:3.9-slim
 
-# Install system dependencies required for Playwright and Chrome
+# Install system dependencies required for Playwright and Chromium
 RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    ca-certificates \
-    curl \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update \
-    && apt-get install -y \
-    google-chrome-stable \
+    chromium \
+    chromium-driver \
     fonts-ipafont-gothic \
     fonts-wqy-zenhei \
     fonts-thai-tlwg \
     fonts-kacst \
     fonts-freefont-ttf \
+    ca-certificates \
+    curl \
+    libgbm1 \
     libxss1 \
     libx11-xcb1 \
     libxtst6 \
     libnss3 \
-    libxss1 \
     libasound2 \
     libatk-bridge2.0-0 \
     libgtk-3-0 \
@@ -49,6 +44,7 @@ RUN mkdir -p uploads && chmod 777 uploads
 ENV PYTHONUNBUFFERED=1 \
     PORT=8080 \
     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
+    PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium \
     DISPLAY=:99
 
 # Create a non-root user and switch to it
